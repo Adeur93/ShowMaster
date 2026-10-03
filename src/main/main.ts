@@ -2,6 +2,10 @@
 import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import path from 'path';
 
+// Declaración de las variables inyectadas por Electron Forge
+declare const APP_RENDERER_VITE_DEV_SERVER_URL: string;
+declare const APP_RENDERER_VITE_NAME: string;
+
 let controlWindow: BrowserWindow | null = null;
 let outputWindow: BrowserWindow | null = null;
 
@@ -15,12 +19,11 @@ function createWindows() {
     width: 1280,
     height: 800,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/controlpreload.js'),
       contextIsolation: true,
       nodeIntegration: false,
     },
   });
-  controlWindow.loadURL(MAIN_WINDOW_VITE_DEV_SERVER_URL || `file://${path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)}`);
 
   // 2. Ventana de Proyección (Pantalla Completa en Display Secundario)
   outputWindow = new BrowserWindow({
@@ -32,13 +35,26 @@ function createWindows() {
     frame: false,
     alwaysOnTop: true,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '../preload/projectorPreload.js'),
       contextIsolation: true,
     },
   });
-  
-  // Cargar vista de salida
-  outputWindow.loadURL((MAIN_WINDOW_VITE_DEV_SERVER_URL || `file://${path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`)}`) + '#/output');
+  // 3. Enrutamiento Inteligente (Desarrollo vs Producción)
+  if (APP_RENDERER_VITE_DEV_SERVER_URL) {
+    // ESTAMOS EN DESARROLLO (Vite enciende un localhost)
+    controlWindow.loadURL(`${APP_RENDERER_VITE_DEV_SERVER_URL}/src/renderer/control/index.html`);
+    outputWindow.loadURL(`${APP_RENDERER_VITE_DEV_SERVER_URL}/src/renderer/projector/index.html`);
+    // Opcional: Abrir herramientas de desarrollador
+    controlWindow.webContents.openDevTools();
+  } else {
+    // ESTAMOS EN PRODUCCIÓN (Archivos minificados locales)
+    controlWindow.loadFile(
+      path.join(__dirname, `../renderer/${APP_RENDERER_VITE_NAME}/src/renderer/control/index.html`)
+    );
+    outputWindow.loadFile(
+      path.join(__dirname, `../renderer/${APP_RENDERER_VITE_NAME}/src/renderer/projector/index.html`)
+    );
+  }
 }
 
 // IPC: Retransmitir cambios de la Ventana de Control a la Ventana de Proyección
