@@ -25,19 +25,24 @@ const config: ForgeConfig = {
       build: [
         {
           // `entry` is just an alias for `build.lib.entry` in the corresponding file of `config`.
-          entry: 'src/main.ts',
+          entry: 'src/main/main.ts',
           config: 'vite.main.config.mts',
           target: 'main',
         },
         {
-          entry: 'src/preload.ts',
+          entry: 'src/preload/controlpreload.ts',
           config: 'vite.preload.config.mts',
           target: 'preload',
         },
+        {
+          entry: 'src/preload/projectorPreload.ts',
+          config: 'vite.preload.config.mts',
+          target: 'projector-preload',
+        }
       ],
       renderer: [
         {
-          name: 'main_window',
+          name: 'app_renderer',
           config: 'vite.renderer.config.mts',
         },
       ],

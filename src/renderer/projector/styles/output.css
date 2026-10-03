@@ -1,0 +1,26 @@
+/* Estilos dinámicos aplicados al texto proyectado */
+.projected-text {
+  position: absolute;
+  z-index: 2;
+  width: 85%;
+  word-wrap: break-word;
+  line-height: 1.3;
+}
+
+/* Sombra de alta opacidad para asegurar contraste sobre imágenes/vídeos claros */
+.has-shadow {
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0px 0px 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Delineado de texto (Outline) */
+.has-outline {
+  -webkit-text-stroke: 1.5px #000000;
+}
+
+/* Capa de atenuación sobre el fondo */
+.bg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(0, 0, 0, 0.35); /* Configurable */
+}
