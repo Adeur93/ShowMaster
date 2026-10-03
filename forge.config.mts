@@ -37,7 +37,7 @@ const config: ForgeConfig = {
         {
           entry: 'src/preload/projectorPreload.ts',
           config: 'vite.preload.config.mts',
-          target: 'projector-preload',
+          target: 'preload',
         }
       ],
       renderer: [
