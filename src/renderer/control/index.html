@@ -1,12 +1,52 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
-    <script type="module" src="/src/renderer.ts"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Proyektor - Panel de Control</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body { display: grid; grid-template-columns: 300px 1fr 250px; gap: 16px; padding: 16px; }
+    .panel { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+    .panel-header { font-size: 1.1em; font-weight: bold; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+    .resource-list { flex-grow: 1; overflow-y: auto; }
+    .resource-item { padding: 12px; border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 8px; cursor: pointer; }
+    .resource-item:hover { border-color: var(--accent); }
+  </style>
+</head>
+<body>
+  
+  <!-- Columna 1: Biblioteca -->
+  <div class="panel">
+    <div class="panel-header">Biblioteca</div>
+    <div class="resource-list">
+      <!-- Elemento de ejemplo para proyectar -->
+      <div class="resource-item" id="btn-verse">
+        <strong>Juan 3:16</strong>
+        <p style="font-size: 0.8em; color: var(--text-muted)">Porque de tal manera amó Dios al mundo...</p>
+      </div>
+      <div class="resource-item" id="btn-video">
+        <strong>Fondo Animado (Video)</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columna 2: Guion (Setlist) -->
+  <div class="panel">
+    <div class="panel-header">Guion Actual</div>
+    <div class="resource-list">
+      <p style="color: var(--text-muted); text-align: center; margin-top: 20px;">El guion está vacío. Arrastra elementos aquí.</p>
+    </div>
+  </div>
+
+  <!-- Columna 3: Controles Maestros -->
+  <div class="panel">
+    <div class="panel-header">Salida en Vivo</div>
+    <div style="aspect-ratio: 16/9; background: #000; border-radius: var(--radius); border: 2px solid var(--accent); margin-bottom: 16px;">
+      <!-- Aquí iría una miniatura de preview en el futuro -->
+    </div>
+    <button class="btn btn-danger" id="btn-clear">Limpiar Pantalla (Apagar)</button>
+  </div>
+
+  <script type="module" src="./main.tsx"></script>
+</body>
 </html>

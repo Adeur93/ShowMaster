@@ -1,0 +1,50 @@
+:root {
+  /* TEMA CLARO (Por defecto): Grises claros y acentos azules */
+  --bg-app: #f3f4f6;
+  --bg-panel: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
+  --accent: #3b82f6; /* Azul */
+  --accent-hover: #2563eb;
+  --border: #e5e7eb;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* TEMA OSCURO: Grises oscuros y acentos naranjas */
+    --bg-app: #111827;
+    --bg-panel: #1f2937;
+    --text-main: #f9fafb;
+    --text-muted: #9ca3af;
+    --accent: #f97316; /* Naranja */
+    --accent-hover: #ea580c;
+    --border: #374151;
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Clases de utilidad UI */
+.btn {
+  background-color: var(--bg-panel);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.btn:hover { background-color: var(--bg-app); }
+.btn-primary { background-color: var(--accent); color: white; border: none; }
+.btn-primary:hover { background-color: var(--accent-hover); }
+.btn-danger { background-color: #ef4444; color: white; border: none; }
+.btn-danger:hover { background-color: #dc2626; }
