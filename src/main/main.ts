@@ -1,13 +1,23 @@
 // src/main.ts
 import { app, BrowserWindow, screen, ipcMain } from 'electron';
 import path from 'path';
+import { WindowManager } from './windowmanager';
+import { DbService } from './database';
+import { setupIpcHandlers } from './ipchandlers';
 
 // Declaración de las variables inyectadas por Electron Forge
 declare const APP_RENDERER_VITE_DEV_SERVER_URL: string;
 declare const APP_RENDERER_VITE_NAME: string;
 
+// Evitar que la aplicación se inicie varias veces
+if (require('electron-squirrel-startup')) {
+  app.quit();
+}
+
 let controlWindow: BrowserWindow | null = null;
 let outputWindow: BrowserWindow | null = null;
+let windowManager: WindowManager;
+let dbService: DbService;
 
 function createWindows() {
   const displays = screen.getAllDisplays();
@@ -35,7 +45,7 @@ function createWindows() {
     frame: false,
     alwaysOnTop: true,
     webPreferences: {
-      preload: path.join(__dirname, '../preload/projectorPreload.js'),
+      preload: path.join(__dirname, '../preload/projectorpreload.js'),
       contextIsolation: true,
     },
   });
@@ -64,4 +74,23 @@ ipcMain.on('PROJECT_SLIDE', (_event, slideData) => {
   }
 });
 
-app.whenReady().then(createWindows);
+app.whenReady().then(() => {
+  createWindows();
+
+  // Inicializar Base de Datos
+  dbService = new DbService();
+
+  // Inicializar Gestor de Ventanas
+  windowManager = new WindowManager();
+  windowManager.createWindows();
+
+  // Conectar Rutas (IPC)
+  setupIpcHandlers(windowManager, dbService);
+});
+
+// En macOS las apps suelen quedar vivas en el dock
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
